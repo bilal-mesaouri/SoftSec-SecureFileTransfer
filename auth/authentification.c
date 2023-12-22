@@ -41,12 +41,11 @@ int authenticate(const char *username, const char *password) {
 
         if (sscanf(line, "%[^#]#%[^\n]", stored_username, stored_hash) == 2) {
 
-
             if (strcmp(username, stored_username) == 0) {
                 // Username match, hash the entered password and compare
-                unsigned char entered_hash[MAX_PASSWORD_LEN];
+                char entered_hash[MAX_PASSWORD_LEN];
                 hash_password(password, entered_hash);
-                if (strcmp((char *) entered_hash, stored_hash) == 0) {
+                if (strcmp(entered_hash, stored_hash) == 0) {
                     fclose(authFile);
                     return 1; // Authentication successful
                 }

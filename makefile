@@ -1,6 +1,6 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -std=c11 -Wno-pointer-sign -Wdeprecated-declarations -Wimplicit-function-declaration
-LDFLAGS = -L. -lserver -lssl -lcrypto libcjson.a
+CFLAGS = -Wall -Wextra -std=c11 -Wno-pointer-sign -Wdeprecated-declarations -Wunused-variable -Wimplicit-function-declaration -Wimplicit-function-declaration
+LDFLAGS = -L. -lserver -lclient -lssl -lcrypto libcjson.a
 
 SRC_DIRS = auth encryption
 OBJ_DIR = obj
