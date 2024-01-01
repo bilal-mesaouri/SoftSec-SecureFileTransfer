@@ -1,43 +1,22 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -std=c11 -Wno-pointer-sign -Wdeprecated-declarations -Wunused-variable -Wimplicit-function-declaration -Wimplicit-function-declaration
-LDFLAGS = -L. -lserver -lclient -lssl -lcrypto libcjson.a
+CFLAGS = -Wall -std=c99
+LIBS = -lcrypto -L. -lclient -lserver -lcjson -lssl -Wno-deprecated-declarations -Wno-implicit-function-declaration
+OBJ = Src/encryption.o Src/file_operations.o Src/authentification.o
 
-SRC_DIRS = auth encryption
-OBJ_DIR = obj
+all: server
 
-# For the release build
-CFLAGS_RELEASE = $(CFLAGS) -O2
+server: server.c $(OBJ) 
+	$(CC) $(CFLAGS) -o $@ $< $(OBJ) $(LIBS)
 
-# For the debugging build
-CFLAGS_DEBUG = $(CFLAGS) -g -O0
+Src/encryption.o: Src/encryption.c
+	$(CC) $(CFLAGS) -c -o $@ $<
 
-SRCS = $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
-OBJS = $(patsubst %.c, $(OBJ_DIR)/%.o, $(SRCS))
-OBJS_DEBUG = $(patsubst %.c, $(OBJ_DIR)/%_debug.o, $(SRCS))
-MAIN_OBJ = server.o
+Src/file_operations.o: Src/fileOperations.c
+	$(CC) $(CFLAGS) -c -o $@ $<
 
-TARGET = server
-TARGET_DEBUG = server_debug
-
-all: $(TARGET)
-
-debug: $(TARGET_DEBUG)
-
-$(OBJ_DIR)/%.o: %.c
-	@mkdir -p $(@D)
-	$(CC) $(CFLAGS_RELEASE) -c $< -o $@
-
-$(OBJ_DIR)/%_debug.o: %.c
-	@mkdir -p $(@D)
-	$(CC) $(CFLAGS_DEBUG) -c $< -o $@
-
-$(TARGET): $(OBJS) $(MAIN_OBJ)
-	$(CC) $(CFLAGS_RELEASE) $^ -o $@ $(LDFLAGS)
-
-$(TARGET_DEBUG): $(OBJS_DEBUG) $(OBJ_DIR)/$(MAIN_OBJ:%.o=%_debug.o)
-	$(CC) $(CFLAGS_DEBUG) $^ -o $@ $(LDFLAGS)
-
+Src/authentification.o: Src/authentification.c
+	$(CC) $(CFLAGS) -c -o $@ $<
 clean:
-	rm -rf $(OBJ_DIR) $(TARGET) $(TARGET_DEBUG)
+	rm -f server $(OBJ)
 
-.PHONY: all debug clean
+.PHONY: all clean

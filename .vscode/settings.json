@@ -1,0 +1,9 @@
+{
+    "files.associations": {
+        "rand.h": "c",
+        "dirent.h": "c",
+        "encryption.h": "c",
+        "fileoperations.h": "c",
+        "rsa.h": "c"
+    }
+}

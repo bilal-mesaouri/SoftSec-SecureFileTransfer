@@ -40,7 +40,6 @@ int authenticate(const char *username, const char *password) {
         char stored_hash[MAX_PASSWORD_LEN];
 
         if (sscanf(line, "%[^#]#%[^\n]", stored_username, stored_hash) == 2) {
-
             if (strcmp(username, stored_username) == 0) {
                 // Username match, hash the entered password and compare
                 char entered_hash[MAX_PASSWORD_LEN];
